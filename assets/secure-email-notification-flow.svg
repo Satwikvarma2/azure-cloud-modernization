@@ -1,39 +1,35 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="720" viewBox="0 0 1280 720" role="img" aria-labelledby="title desc">
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="390" viewBox="0 0 1200 390" role="img" aria-labelledby="title desc">
 <title id="title">Secure email notification flow</title>
-<desc id="desc">Azure Synapse obtains an OAuth token from Entra ID, sends an authenticated HTTP POST to a Logic App, which uses Microsoft Graph to send email. Separate app registrations for Dev, PPE and Prod.</desc>
-<rect width="1280" height="720" fill="#FAF9F6"/>
-<g font-family="Arial,Helvetica,sans-serif" fill="#20262D">
-<text x="70" y="80" font-size="16" letter-spacing="3" font-weight="bold">AZURE ARCHITECTURE / 01</text>
-<line x1="70" y1="99" x2="330" y2="99" stroke="#D76D40" stroke-width="3"/>
-<text x="70" y="163" font-size="52" font-weight="bold">Secure email notification flow</text>
-<text x="70" y="204" font-size="25" fill="#64707B">Token-based authentication across cloud services</text>
+<desc id="desc">Four-stage conceptual flow: Azure Synapse, Microsoft Entra ID, Azure Logic App, Microsoft Graph. Synapse receives an access token from Entra ID, then calls the Logic App over HTTPS. The Logic App uses separately authorized access to Microsoft Graph to send email.</desc>
+<rect width="1200" height="390" fill="#FAF9F6"/>
+<g font-family="Arial, Helvetica, sans-serif">
+<text x="55" y="71" fill="#19252F" font-size="35" font-weight="700">Secure email notification flow</text>
+<text x="55" y="103" fill="#65717A" font-size="17">Azure Synapse · Microsoft Entra ID · Logic Apps · Microsoft Graph</text>
+<g fill="#FFFFFF" stroke="#D9DEE1" stroke-width="1.5">
+<rect x="55" y="159" width="242" height="117" rx="12"/>
+<rect x="338" y="159" width="242" height="117" rx="12"/>
+<rect x="621" y="159" width="242" height="117" rx="12"/>
+<rect x="904" y="159" width="242" height="117" rx="12"/>
 </g>
-<defs><marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0 0 L10 5 L0 10Z" fill="#D76D40"/></marker></defs>
-<g fill="none" stroke="#D76D40" stroke-width="3" marker-end="url(#arrow)">
-<path d="M240 457 C240 355 290 323 390 323"/>
-<path d="M515 369 C515 415 430 424 372 455"/>
-<path d="M364 515 H747"/>
-<path d="M988 515 H1040"/>
+<g stroke="#CD6A42" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round">
+<path d="M306 218 H326 M320 211 L327 218 L320 225"/>
+<path d="M589 218 H609 M603 211 L610 218 L603 225"/>
+<path d="M872 218 H892 M886 211 L893 218 L886 225"/>
 </g>
-<g fill="#FAF9F6" stroke="#303C45" stroke-width="2">
-<rect x="60" y="455" width="305" height="124" rx="12"/>
-<rect x="391" y="281" width="338" height="115" rx="12"/>
-<rect x="749" y="455" width="240" height="124" rx="12"/>
-<rect x="1040" y="455" width="200" height="124" rx="12"/>
+<g fill="#1E2A33" font-size="23" font-weight="700">
+<text x="78" y="205">Azure Synapse</text>
+<text x="361" y="205">Microsoft Entra ID</text>
+<text x="644" y="205">Azure Logic App</text>
+<text x="927" y="205">Microsoft Graph</text>
 </g>
-<g font-family="Arial,Helvetica,sans-serif">
-<g fill="#D76D40" font-size="17" font-weight="bold">
-<text x="84" y="486">01</text><text x="415" y="311">02</text><text x="774" y="486">03</text><text x="1062" y="486">04</text>
+<g fill="#66737D" font-size="17">
+<text x="78" y="242">Web Activity</text>
+<text x="361" y="242">Issues access token</text>
+<text x="644" y="242">Validates request</text>
+<text x="927" y="242">Sends email</text>
 </g>
-<g fill="#20262D" font-size="26" font-weight="bold">
-<text x="84" y="523">Azure Synapse</text><text x="415" y="349">Microsoft Entra ID</text><text x="774" y="523">Azure Logic App</text><text x="1062" y="523">Microsoft</text><text x="1062" y="551">Graph API</text>
+<line x1="55" y1="327" x2="1145" y2="327" stroke="#DBDEE0"/>
+<text x="55" y="353" fill="#697680" font-size="16">DEV / PPE / PROD</text>
+<text x="240" y="353" fill="#697680" font-size="16">Separate app registrations by environment</text>
 </g>
-<g fill="#63717E" font-size="18">
-<text x="84" y="552">Web Activity</text><text x="415" y="378">OAuth 2.0 access token</text><text x="774" y="552">Validate and execute</text><text x="1062" y="575">Send email</text>
-</g>
-<g fill="#27343D" font-size="17">
-<text x="143" y="299">1. Request token</text><text x="441" y="434">2. Return token</text><text x="475" y="497">3. HTTPS POST + bearer token</text><text x="1024" y="485">4. Graph API call</text>
-</g>
-<line x1="70" y1="646" x2="1210" y2="646" stroke="#B8BDC2" stroke-width="1"/>
-<text x="70" y="676" font-size="17" fill="#596877" font-family="Arial,Helvetica,sans-serif">DEV / PPE / PROD  •  Separate app registrations per environment  •  Independent illustrative architecture</text>
-</g></svg>
+</svg>
