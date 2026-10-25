@@ -1,35 +1,72 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="390" viewBox="0 0 1200 390" role="img" aria-labelledby="title desc">
+<svg xmlns="http://www.w3.org/2000/svg" width="1560" height="900" viewBox="0 0 1560 900" role="img" aria-labelledby="title description">
 <title id="title">Secure email notification flow</title>
-<desc id="desc">Four-stage conceptual flow: Azure Synapse, Microsoft Entra ID, Azure Logic App, Microsoft Graph. Synapse receives an access token from Entra ID, then calls the Logic App over HTTPS. The Logic App uses separately authorized access to Microsoft Graph to send email.</desc>
-<rect width="1200" height="390" fill="#FAF9F6"/>
-<g font-family="Arial, Helvetica, sans-serif">
-<text x="55" y="71" fill="#19252F" font-size="35" font-weight="700">Secure email notification flow</text>
-<text x="55" y="103" fill="#65717A" font-size="17">Azure Synapse · Microsoft Entra ID · Logic Apps · Microsoft Graph</text>
-<g fill="#FFFFFF" stroke="#D9DEE1" stroke-width="1.5">
-<rect x="55" y="159" width="242" height="117" rx="12"/>
-<rect x="338" y="159" width="242" height="117" rx="12"/>
-<rect x="621" y="159" width="242" height="117" rx="12"/>
-<rect x="904" y="159" width="242" height="117" rx="12"/>
+<desc id="description">Azure Synapse gets an access token from Microsoft Entra ID and sends an authenticated HTTPS POST request to Azure Logic App. The Logic App uses separate authorization to call Microsoft Graph API and send email. Dev, PPE, and Prod have separate app registrations.</desc>
+<defs>
+<marker id="arrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0 0 L8 4 L0 8Z" fill="#DD6A3C"/></marker>
+</defs>
+<rect width="1560" height="900" fill="#FBFAF7"/>
+<g font-family="Arial,Helvetica,sans-serif">
+<text x="65" y="80" fill="#172432" font-size="18" letter-spacing="3">AZURE ARCHITECTURE / 01</text>
+<path d="M65 99 H126" stroke="#E56E43" stroke-width="3"/>
+<text x="65" y="192" font-size="62" font-weight="700" fill="#172432">Secure email notification flow</text>
+<text x="65" y="246" font-size="30" fill="#6A7580">Token-based authorization across cloud services</text>
 </g>
-<g stroke="#CD6A42" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round">
-<path d="M306 218 H326 M320 211 L327 218 L320 225"/>
-<path d="M589 218 H609 M603 211 L610 218 L603 225"/>
-<path d="M872 218 H892 M886 211 L893 218 L886 225"/>
+<!-- Cards: Synapse, Entra, Logic App, Graph -->
+<g fill="#FFF" stroke="#263440" stroke-width="1.7">
+<rect x="64" y="525" width="345" height="145" rx="10"/>
+<rect x="435" y="335" width="365" height="139" rx="10"/>
+<rect x="819" y="525" width="315" height="145" rx="10"/>
+<rect x="1260" y="525" width="264" height="145" rx="10"/>
 </g>
-<g fill="#1E2A33" font-size="23" font-weight="700">
-<text x="78" y="205">Azure Synapse</text>
-<text x="361" y="205">Microsoft Entra ID</text>
-<text x="644" y="205">Azure Logic App</text>
-<text x="927" y="205">Microsoft Graph</text>
+<!-- Accent arrows -->
+<g fill="none" stroke="#DD6A3C" stroke-width="2.8" marker-end="url(#arrow)">
+<path d="M270 525 C270 435 327 395 431 395"/>
+<path d="M510 474 C500 512 463 523 417 544"/>
+<path d="M413 598 H810"/>
+<path d="M1138 598 H1250"/>
 </g>
-<g fill="#66737D" font-size="17">
-<text x="78" y="242">Web Activity</text>
-<text x="361" y="242">Issues access token</text>
-<text x="644" y="242">Validates request</text>
-<text x="927" y="242">Sends email</text>
+<g font-family="Arial,Helvetica,sans-serif" fill="#1E2E3C">
+<text x="122" y="425" font-size="21">Request token</text>
+<text x="499" y="513" font-size="20">Access token</text>
+<text x="529" y="575" font-size="21">HTTPS POST + bearer token</text>
+<text x="1135" y="578" font-size="20">Graph authorization</text>
 </g>
-<line x1="55" y1="327" x2="1145" y2="327" stroke="#DBDEE0"/>
-<text x="55" y="353" fill="#697680" font-size="16">DEV / PPE / PROD</text>
-<text x="240" y="353" fill="#697680" font-size="16">Separate app registrations by environment</text>
+<!-- Icon: Synapse-like network -->
+<g stroke="#0D9BE0" stroke-width="8" fill="none" stroke-linejoin="round">
+<path d="M92 570 L133 547 L174 570 V617 L133 642 L92 617Z"/>
+<path d="M111 592 L152 614"/>
+</g>
+<g fill="#18B4E2"><circle cx="111" cy="592" r="12"/><circle cx="152" cy="614" r="12"/></g>
+<!-- Icon: Entra stylized prism -->
+<path d="M465 398 L500 357 L545 404 L500 446Z" fill="#1683DC"/>
+<path d="M465 398 L500 357 L501 405 L500 446Z" fill="#4CC7ED"/>
+<path d="M501 405 L545 404 L500 446Z" fill="#074CBB"/>
+<!-- Icon: Logic App workflow -->
+<g fill="none" stroke="#36ADE5" stroke-width="9" stroke-linecap="round"><path d="M853 590 V568 H907 V590 M879 568 V548"/></g>
+<rect x="867" y="535" width="25" height="27" rx="5" fill="#138EED"/>
+<rect x="840" y="588" width="28" height="28" rx="5" fill="#70C83D"/>
+<rect x="893" y="588" width="28" height="28" rx="5" fill="#70C83D"/>
+<!-- Icon: Graph abstract geometric mark -->
+<g stroke="#FFFFFF" stroke-width="3" fill="#087ED5">
+<path d="M1287 577 L1326 550 L1368 570 L1376 621 L1330 650 L1284 621Z"/>
+<path d="M1287 577 L1330 650 L1326 550 L1376 621 L1284 621 L1368 570 L1287 577" fill="none"/>
+</g>
+<!-- Labels -->
+<g font-family="Arial,Helvetica,sans-serif">
+<text x="194" y="583" font-size="26" font-weight="700" fill="#172432">Azure Synapse</text>
+<text x="194" y="615" font-size="19" fill="#657280">Web Activity</text>
+<text x="562" y="405" font-size="26" font-weight="700" fill="#172432">Microsoft Entra ID</text>
+<text x="562" y="437" font-size="19" fill="#657280">OAuth 2.0 access token</text>
+<text x="939" y="583" font-size="26" font-weight="700" fill="#172432">Azure Logic App</text>
+<text x="939" y="615" font-size="19" fill="#657280">Validate &amp; execute</text>
+<text x="1390" y="584" font-size="22" font-weight="700" fill="#172432">Microsoft</text>
+<text x="1390" y="609" font-size="22" font-weight="700" fill="#172432">Graph API</text>
+<text x="1390" y="638" font-size="18" fill="#657280">Send email</text>
+</g>
+<path d="M65 810 H500 M1150 810 H1525" stroke="#A9B1B7" stroke-width="1.5"/>
+<g font-family="Arial,Helvetica,sans-serif" font-size="21">
+<text x="530" y="817" fill="#182839" letter-spacing="2">DEV / PPE / PROD</text>
+<path d="M764 810 H811" stroke="#E56E43" stroke-width="2.3"/>
+<text x="835" y="817" fill="#677481">Separate app registrations</text>
 </g>
 </svg>
