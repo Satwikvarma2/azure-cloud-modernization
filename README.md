@@ -19,6 +19,13 @@ Development, PPE and production use separate application registrations in this r
 
 ## Authenticating Synapse to a Logic App: Managed identity vs. SAS
 
+### What is OAuth 2.0?
+
+**OAuth 2.0 is an authorization framework that enables an application to obtain an access token and use it to access protected resources or services with defined permissions.** It allows access to be granted without sharing the resource owner's password with the calling application. OAuth 2.0 is primarily about **authorization**; user authentication is a separate concern, commonly handled by OpenID Connect (OIDC) when user sign-in is needed.
+
+In this Azure integration, **Synapse uses its managed identity to request an OAuth 2.0 access token from Microsoft Entra ID**. The Synapse Web Activity sends that token to the Logic App, which must validate it and enforce its configured authorization policy before allowing the workflow to run. Managed identity provides the application's Azure identity; OAuth 2.0 provides the token-based authorization mechanism.
+
+
 When an **Azure Synapse pipeline Web Activity** calls a **Logic App HTTP Request trigger**, two common authorization approaches are:
 
 | | Managed identity (recommended) | Shared access signature (SAS) |
