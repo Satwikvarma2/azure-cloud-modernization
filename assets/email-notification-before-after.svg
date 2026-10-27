@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 590" role="img" aria-labelledby="title desc">
+<title id="title">Email notification architecture: before and after</title>
+<desc id="desc">Before: Azure Synapse Lookup invokes Platform database stored procedure on an FDL server, which runs SendEmail PowerShell script through xp_cmdshell and calls Microsoft Graph with a service account. After: Azure Synapse Web Activity with managed identity calls authenticated Logic App, which sends through Microsoft Graph with its own managed identity.</desc>
+<defs>
+  <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10Z" fill="#536273"/></marker>
+  <style>text{font-family:Arial,Helvetica,sans-serif;fill:#172536} .heading{font-weight:700;font-size:29px}.label{font-weight:700;font-size:17px}.small{font-size:13px;fill:#536273}.tag{font-size:15px;font-weight:700}.box{fill:white;stroke:#aebbc5;stroke-width:1.3} .line{stroke:#536273;stroke-width:2;fill:none;marker-end:url(#arrow)}</style>
+</defs>
+<rect width="1200" height="590" fill="#fff"/>
+<text x="46" y="55" class="heading">Email notification architecture</text><text x="46" y="80" class="small">Replacing SQL and VM-based email delivery with an authenticated Logic App</text>
+<rect x="35" y="104" width="1130" height="204" rx="14" fill="#fcf5f2" stroke="#f2ded6"/>
+<text x="56" y="142" class="tag" fill="#9b442c">BEFORE · LEGACY</text>
+<rect x="57" y="174" width="187" height="88" rx="9" class="box"/><text x="150" y="206" text-anchor="middle" class="label">Azure Synapse</text><text x="150" y="228" text-anchor="middle" class="small">Lookup activity</text>
+<rect x="298" y="174" width="202" height="88" rx="9" class="box"/><text x="399" y="201" text-anchor="middle" class="label">Platform DB</text><text x="399" y="224" text-anchor="middle" class="small">Notify stored procedure</text><text x="399" y="243" text-anchor="middle" class="small">on FDL server</text>
+<rect x="557" y="174" width="196" height="88" rx="9" class="box"/><text x="655" y="201" text-anchor="middle" class="label">PowerShell</text><text x="655" y="224" text-anchor="middle" class="small">SendEmail.ps1</text><text x="655" y="243" text-anchor="middle" class="small">on FDL VM</text>
+<rect x="808" y="174" width="166" height="88" rx="9" class="box"/><text x="891" y="207" text-anchor="middle" class="label">Microsoft Graph</text><text x="891" y="229" text-anchor="middle" class="small">Service account</text>
+<rect x="1022" y="174" width="120" height="88" rx="9" class="box"/><text x="1082" y="205" text-anchor="middle" class="label">Email</text><text x="1082" y="228" text-anchor="middle" class="small">Recipients</text>
+<path d="M244 218H298 M500 218H557 M753 218H808 M974 218H1022" class="line"/>
+<text x="527" y="165" text-anchor="middle" class="small">xp_cmdshell</text>
+<rect x="35" y="327" width="1130" height="204" rx="14" fill="#f3faf6" stroke="#d6e9dc"/>
+<text x="56" y="365" class="tag" fill="#206947">AFTER · MODERN</text>
+<rect x="57" y="397" width="187" height="88" rx="9" class="box"/><text x="150" y="429" text-anchor="middle" class="label">Azure Synapse</text><text x="150" y="451" text-anchor="middle" class="small">Web activity</text>
+<rect x="419" y="397" width="300" height="88" rx="9" class="box"/><text x="569" y="429" text-anchor="middle" class="label">Azure Logic App</text><text x="569" y="451" text-anchor="middle" class="small">HTTP trigger + token validation</text>
+<rect x="808" y="397" width="166" height="88" rx="9" class="box"/><text x="891" y="429" text-anchor="middle" class="label">Microsoft Graph</text><text x="891" y="451" text-anchor="middle" class="small">Managed identity</text>
+<rect x="1022" y="397" width="120" height="88" rx="9" class="box"/><text x="1082" y="429" text-anchor="middle" class="label">Email</text><text x="1082" y="451" text-anchor="middle" class="small">Recipients</text>
+<path d="M244 441H419 M719 441H808 M974 441H1022" class="line"/>
+<text x="332" y="415" text-anchor="middle" class="small">Entra OAuth token</text><text x="332" y="472" text-anchor="middle" class="small">Synapse managed identity</text>
+<text x="46" y="565" class="small">Removed from email delivery path: Platform DB notification procedure · FDL VM · PowerShell email script</text>
+</svg>
