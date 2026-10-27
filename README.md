@@ -2,6 +2,14 @@
 
 Modernizing legacy SQL and PowerShell workflows with Azure Logic Apps, Synapse Analytics, Microsoft Entra ID, Microsoft Graph, Bicep and CI/CD.
 
+## Architecture modernization: before and after
+
+![Before and after email notification architecture](assets/email-notification-before-after.svg)
+
+The legacy email flow used a Synapse Lookup to execute a SQL notification procedure on an FDL server; the procedure invoked a PowerShell script on the VM, which used service-account credentials to call Microsoft Graph. In the modern flow, a Synapse Web Activity calls a Logic App HTTP trigger with an Entra-issued token for its managed identity; the Logic App validates the token and sends email through Microsoft Graph using a separately authorized managed identity.
+
+This comparison focuses on the email delivery path, not unrelated server or SQL workloads.
+
 ## Secure email notification architecture
 
 ![Azure Synapse to Microsoft Entra ID to Logic App to Microsoft Graph architecture](assets/secure-email-notification-flow.svg)
