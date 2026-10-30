@@ -25,6 +25,49 @@ Development, PPE and production use separate application registrations in this r
 
 > **Note:** The diagram is a conceptual representation, not a claim that one token works for both the Logic App endpoint and Microsoft Graph. Each API requires an appropriately issued token and granted permissions.
 
+## Proposed security improvement: private endpoint for the Logic App
+
+**Status: Proposal — not yet deployed.**
+
+### Current design: public network reachability with identity-based access
+
+The Standard Logic App currently permits inbound connections from all networks (public network access is enabled). **This does not mean unauthenticated requests are allowed to run the workflow.** The Synapse Web Activity sends an OAuth 2.0 bearer token obtained with its configured user-assigned managed identity (UAMI). The Logic App's Microsoft Entra authentication and authorization configuration must validate the token (including its intended audience and authorized caller) before the HTTP-triggered workflow executes.
+
+Public reachability and authorization are separate controls: anyone on the internet may attempt a network connection, but only correctly authorized callers should be able to trigger the workflow.
+
+### Proposed design: private network reachability plus the same authorization
+
+Introduce an **inbound private endpoint** for the **Standard Logic App** and, after validating connectivity, disable public network access. Keep Microsoft Entra token validation and UAMI-based calls from Synapse. The resulting design is *defense in depth*: a request needs **both** private network reachability **and** successful authorization.
+
+```text
+CURRENT
+Synapse Web Activity (UAMI / Entra OAuth token)
+    -> Public HTTPS Logic App endpoint (public network access enabled)
+    -> Entra token validation + caller authorization -> Workflow
+
+PROPOSED
+Synapse Web Activity (UAMI / Entra OAuth token)
+    -> Supported private network path + private DNS
+    -> Logic App private endpoint (public network access disabled)
+    -> Entra token validation + caller authorization -> Workflow
+```
+
+A private endpoint is **not** simply an allowlist of Synapse's public IP addresses. It provides a private IP in an Azure virtual network. Enabling it on the Logic App alone does not guarantee that a Synapse pipeline Web Activity can reach it.
+
+### Implementation checks before rollout
+
+1. Confirm the Logic App is **Standard** and its HTTP request trigger supports the proposed inbound configuration.
+2. Determine **where the Synapse Web Activity actually runs** (integration runtime) and verify a supported path to the private endpoint; do not assume a Synapse managed private endpoint alone makes every Web Activity private-network capable. Use a supported integration runtime/network design.
+3. Configure the private endpoint, virtual-network routing and **private DNS** for the Logic App hostname.
+4. Test trigger invocation from the intended private caller with a valid UAMI token. Confirm the configured Entra audience and caller authorization are still enforced.
+5. Test that an unauthorized token fails **from inside** the private network, and that requests **from outside** the allowed network cannot reach the workflow after public access is disabled.
+6. Check effects on CI/CD deployment agents, operational troubleshooting and portal/run-history access; any tools requiring inbound application access may need private connectivity.
+7. Disable public inbound access **only after** the private path has been proven end-to-end. Have a rollback plan to restore service if connectivity fails.
+
+**Scope:** This change restricts **inbound access to the Logic App**. It does not by itself change the Logic App's **outbound** connectivity to Microsoft Graph or replace Microsoft Entra authorization. Azure RBAC Contributor on the Logic App is **not required merely to invoke an HTTP trigger** with a valid OAuth token.
+
+**Microsoft references:** [Standard Logic Apps: private endpoints](https://learn.microsoft.com/en-us/azure/logic-apps/secure-single-tenant-workflow-virtual-network-private-endpoint) · [Secure access to Logic Apps](https://learn.microsoft.com/en-us/azure/logic-apps/logic-apps-securing-a-logic-app)
+
 ## Authenticating Synapse to a Logic App: Managed identity vs. SAS
 
 ### What is OAuth 2.0?
