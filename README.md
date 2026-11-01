@@ -99,6 +99,12 @@ If SAS is used, treat the entire callback URL as a credential: never commit it, 
 
 **Microsoft documentation:** [Secure access to Logic Apps](https://learn.microsoft.com/en-us/azure/logic-apps/logic-apps-securing-a-logic-app) · [HTTP Request trigger security](https://learn.microsoft.com/en-us/azure/connectors/connectors-native-reqres)
 
+## Private endpoint networking: VNet, NIC and DNS
+
+![Conceptual Logic App private endpoint networking flow](assets/logic-app-private-endpoint-flow.svg)
+
+A proposed private endpoint gives the Standard Logic App a private IP in a VNet subnet. Synapse needs a supported private network path and private DNS resolution; the Logic App still validates the Microsoft Entra access token. See the [step-by-step private endpoint guide](docs/logic-app-private-endpoint.md) for the full explanation and implementation checks.
+
 ## Documentation
 
 - [Azure fundamentals: Bicep and JSON objects](docs/azure-fundamentals.md)
