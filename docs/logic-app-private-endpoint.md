@@ -34,6 +34,29 @@ A private endpoint gives a **Standard Logic App** a private IP in a subnet; priv
 | Caller authorization | UAMI / Entra bearer token validated | Keep the same token validation |
 | Access prerequisite | Network path + correct authorization | **Private** network path + correct authorization |
 
+## Connectivity options considered
+
+The key question is **which network actually executes the Synapse Web Activity**, and whether it can reach the Logic App's private endpoint. Managed identity secures the request but does not establish a network route.
+
+| Approach | When to consider it | Important limitation |
+|---|---|---|
+| **Synapse managed private endpoint + managed VNet integration runtime** | First choice for a focused proof of concept if supported by the workspace and actual Web Activity runtime | The managed private endpoint needs approval, successful provisioning, correct runtime selection and an end-to-end request test; a created endpoint alone proves neither DNS resolution nor the activity's traffic path. |
+| **Restricted public endpoint + UAMI** | Fallback when approved security policy permits limited public inbound access | Use supported allowlisting controls and the applicable regional Azure Integration Runtime outbound ranges; ranges can be shared or change. Service tags are not universally accepted by every Logic App inbound access restriction feature. This is **not private connectivity**. |
+| **Self-hosted Integration Runtime (SHIR)** | When an appropriate host with the necessary private connectivity exists and managed-runtime connectivity is unavailable | Requires a managed Windows machine/VM or equivalent supported host, runtime installation, patches and operations; don't create a new VM solely for this unless required. |
+
+### Proof-of-concept acceptance criteria
+
+1. Check that the Synapse workspace has a **Managed Virtual Network** and identify the integration runtime bound to the **actual Web Activity**.
+2. Create the managed private endpoint to the supported target resource and verify both **provisioning succeeded** and **connection approved**. These are necessary checks, not proof of successful request routing.
+3. Invoke the **normal Logic App hostname** with a valid Entra token through the intended runtime; record the pipeline run ID, Logic App run ID, and observed result.
+4. To prove the **private** path, test with public access disabled (or otherwise conclusively blocked) while keeping the private path and auth policy enabled. If the call still succeeds, check the activity/runtime configuration and DNS/network diagnostics; do not infer privacy merely from HTTP success with public access enabled.
+5. Verify invalid tokens are rejected separately from network reachability.
+6. If testing restricted public access instead, check the current, region-appropriate Azure IR outbound IP ranges and whether the Logic App ingress configuration supports the chosen rules before implementing an allowlist.
+
+A successful private endpoint provisioning state is **not** equivalent to a successful Synapse Web Activity connection. Keep the existing managed identity authorization in every approach.
+
+**Further reading:** [Synapse managed private endpoints](https://learn.microsoft.com/en-us/azure/synapse-analytics/security/synapse-workspace-managed-private-endpoints) · [Azure Integration Runtime IP ranges](https://learn.microsoft.com/en-us/azure/data-factory/azure-integration-runtime-ip-addresses) · [Synapse/ADF pipeline to private Logic App example](https://techcommunity.microsoft.com/blog/integrationsonazureblog/synapse-or-adf-pipeline-access-logic-app-within-private-network/3955324)
+
 ## Practical checks
 
 - Confirm **Standard Logic App**, hosting/network capabilities, selected subnet, private endpoint approval, and correct private DNS zone linkage.
