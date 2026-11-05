@@ -8,6 +8,8 @@ This is a separate workstream from the Synapse pipeline-to-Logic App modernizati
 
 ## Existing process (high level)
 
+![Existing status-update runbook workflow](../assets/runbook-existing-workflow.svg)
+
 1. A status-update automation runbook runs.
 2. The runbook queries SQL to determine the current progress or status of a run.
 3. It constructs a status notification and sends an email.
