@@ -105,6 +105,12 @@ If SAS is used, treat the entire callback URL as a credential: never commit it, 
 
 A proposed private endpoint gives the Standard Logic App a private IP in a VNet subnet. Synapse needs a supported private network path and private DNS resolution; the Logic App still validates the Microsoft Entra access token. See the [step-by-step private endpoint guide](docs/logic-app-private-endpoint.md) for the full explanation and implementation checks.
 
+## Runbook modernization (in progress)
+
+A separate status-update runbook queries SQL to report run progress and sends notification emails through a service-account-based flow. This workstream will modernize the email sender to use an approved shared mailbox with appropriately authorized email-sending credentials, while preserving SQL status checks and notification behavior. Implementation details and validation are still being collected.
+
+See the [runbook status-email modernization plan](docs/runbook-status-email-modernization.md).
+
 ## Documentation
 
 - [Azure fundamentals: Bicep and JSON objects](docs/azure-fundamentals.md)
