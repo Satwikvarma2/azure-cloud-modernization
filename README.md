@@ -70,6 +70,23 @@ A private endpoint is **not** simply an allowlist of Synapse's public IP address
 
 ## Authenticating Synapse to a Logic App: Managed identity vs. SAS
 
+### Synapse → Logic App: HTTP, token, and audience
+
+A Synapse **Web Activity** sends an HTTPS request to the Logic App HTTP trigger. To secure that request with Microsoft Entra ID, Synapse uses its configured managed identity to obtain an **access token** for the specified **resource/audience** (the intended recipient of the token). Synapse sends that token in the HTTP `Authorization: Bearer <token>` header.
+
+The Logic App's configured inbound authentication and authorization controls must validate the token—including its signature, issuer, expiration, and **audience (`aud`)**—and check whether the calling identity is permitted to invoke the workflow. A valid audience alone does **not** grant the caller access.
+
+| Concept | Remember |
+|---|---|
+| **HTTPS** | Secure transport for the request between Synapse and the Logic App |
+| **Access token** | A Microsoft Entra-issued credential conveying claims used to authorize the request; it must be validated |
+| **Audience (`aud`)** | The service/API the token is intended for; it must match the receiver's expected audience |
+| **Microsoft Entra ID** | The identity provider and token issuer |
+| **Managed identity** | The Azure identity Synapse uses to request its token |
+| **Authorization** | The receiver's decision that this caller is allowed to invoke the workflow |
+
+**In short:** Synapse sends the HTTPS request with a token issued for the Logic App's expected audience; the Logic App validates the token **and** authorizes the caller before executing the workflow. Exact inbound validation settings depend on whether the Logic App is Standard or Consumption.
+
 ### What is OAuth 2.0?
 
 **OAuth 2.0 is an authorization framework that enables an application to obtain an access token and use it to access protected resources or services with defined permissions.** It allows access to be granted without sharing the resource owner's password with the calling application. OAuth 2.0 is primarily about **authorization**; user authentication is a separate concern, commonly handled by OpenID Connect (OIDC) when user sign-in is needed.
