@@ -128,6 +128,10 @@ A separate status-update runbook queries SQL to report run progress and sends no
 
 See the [runbook status-email modernization plan](docs/runbook-status-email-modernization.md).
 
+## Middle-tier Azure SQL DACPAC deployment
+
+The release pipeline can deploy a DACPAC through an **Azure SQL failover group listener**, directing database schema changes to the current primary SQL server. The [deployment and failover overview](docs/middle-tier-azure-sql-dacpac-failover.md) includes an embedded, sanitized screenshot of the pipeline-to-listener-to-primary/secondary architecture.
+
 ## Documentation
 
 - [Azure fundamentals: Bicep and JSON objects](docs/azure-fundamentals.md)
