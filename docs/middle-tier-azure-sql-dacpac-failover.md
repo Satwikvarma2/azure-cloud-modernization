@@ -6,6 +6,14 @@ The middle-tier database modernization includes deploying the database schema to
 
 *Illustrative screenshot of the deployment flow. The specific listener hostname has been redacted.*
 
+## What is a DACPAC?
+
+A **DACPAC** is a package containing the **structure (schema) of a SQL database**—such as tables, views, and stored procedures. It helps deploy or update that structure in Azure SQL consistently.
+
+**In this project:** The build pipeline creates the DACPAC, and the release pipeline uses it to deploy database schema changes to Azure SQL through the failover group listener.
+
+**Remember:** A DACPAC is for **database structure**, not for copying the table data itself. Data migration and reconciliation are separate tasks.
+
 ## How the deployment works
 
 1. The **release pipeline** runs a DACPAC deployment to apply approved database schema changes.
