@@ -4,7 +4,7 @@ Modernizing legacy SQL and PowerShell workflows with Azure Logic Apps, Synapse A
 
 ## Architecture modernization: before and after
 
-![Before and after email notification architecture](assets/email-notification-before-after.svg)
+![Before and after email notification architecture](assets/synape-logic-app.png)
 
 The legacy email flow used a Synapse Lookup to execute a SQL notification procedure on an FDL server; the procedure invoked a PowerShell script on the VM, which used service-account credentials to call Microsoft Graph. In the modern flow, a Synapse Web Activity calls a Logic App HTTP trigger with an Entra-issued token for its managed identity; the Logic App validates the token and sends email through Microsoft Graph using a separately authorized managed identity.
 
